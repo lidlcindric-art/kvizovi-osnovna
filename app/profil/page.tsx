@@ -25,6 +25,7 @@ const bojePredmeta: Record<string, string> = {
   'Likovna kultura':   'bg-fuchsia-500',
   'Tehnička kultura':  'bg-cyan-600',
   'Informatika':       'bg-blue-600',
+  'Vjeronauk':         'bg-yellow-500',
 };
 
 const igraIkone: Record<string, string> = {
