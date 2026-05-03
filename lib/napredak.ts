@@ -10,7 +10,7 @@ export interface RezultatKviza {
 }
 
 export interface RezultatIgre {
-  igra: 'memorija' | 'matematika' | 'vjesanje' | 'razvrstavanje' | 'kviz-utrka';
+  igra: 'memorija' | 'matematika' | 'vjesanje' | 'razvrstavanje' | 'kviz-utrka' | 'sat' | 'nizovi';
   bodovi: number;
   detalj: string;
   datum: string;

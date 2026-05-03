@@ -36,6 +36,20 @@ const igrice = [
     ikona: '🏁',
     boja: 'from-rose-400 to-orange-500',
   },
+  {
+    href: '/igrice/sat',
+    naziv: 'Čitanje sata',
+    opis: 'Pročitaj analogni sat i odaberi točno digitalno vrijeme — 3 razine težine',
+    ikona: '🕐',
+    boja: 'from-sky-400 to-cyan-500',
+  },
+  {
+    href: '/igrice/nizovi',
+    naziv: 'Nizovi brojeva',
+    opis: 'Pronađi koji broj nedostaje u matematičkom nizu — 3 razine težine',
+    ikona: '🔢',
+    boja: 'from-teal-400 to-emerald-500',
+  },
 ];
 
 export default function IgricePage() {

@@ -33,6 +33,8 @@ const igraIkone: Record<string, string> = {
   vjesanje: '🔤',
   razvrstavanje: '🗂️',
   'kviz-utrka': '🏁',
+  sat: '🕐',
+  nizovi: '🔢',
 };
 const igraNazivi: Record<string, string> = {
   memorija: 'Memorija',
@@ -40,6 +42,8 @@ const igraNazivi: Record<string, string> = {
   vjesanje: 'Vješanje',
   razvrstavanje: 'Razvrstavanje',
   'kviz-utrka': 'Kviz utrka',
+  sat: 'Čitanje sata',
+  nizovi: 'Nizovi',
 };
 
 function bojaPredmeta(predmet: string) {
@@ -147,7 +151,7 @@ export default function ProfilPage() {
   const streak = izracunajStreak(rezultati);
   const zadnjih10 = [...rezultati].reverse().slice(0, 10);
 
-  const igreStatistike = (['memorija', 'matematika', 'vjesanje', 'razvrstavanje', 'kviz-utrka'] as const)
+  const igreStatistike = (['memorija', 'matematika', 'vjesanje', 'razvrstavanje', 'kviz-utrka', 'sat', 'nizovi'] as const)
     .map(igra => ({
       igra,
       najbolji: najboljiBodIgre(igre, igra),
