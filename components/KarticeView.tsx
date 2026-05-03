@@ -14,15 +14,19 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 const gradijent: Record<string, string> = {
-  amber: 'from-amber-400 to-orange-500',
-  green: 'from-emerald-400 to-green-500',
-  blue: 'from-blue-400 to-indigo-500',
+  amber:  'from-amber-400 to-orange-500',
+  green:  'from-emerald-400 to-green-500',
+  blue:   'from-blue-400 to-indigo-500',
+  violet: 'from-violet-400 to-purple-500',
+  teal:   'from-teal-400 to-cyan-500',
 };
 
 const karticaBoja: Record<string, string> = {
-  amber: 'from-amber-50 to-orange-50 border-amber-200',
-  green: 'from-emerald-50 to-green-50 border-emerald-200',
-  blue: 'from-blue-50 to-indigo-50 border-blue-200',
+  amber:  'from-amber-50 to-orange-50 border-amber-200',
+  green:  'from-emerald-50 to-green-50 border-emerald-200',
+  blue:   'from-blue-50 to-indigo-50 border-blue-200',
+  violet: 'from-violet-50 to-purple-50 border-violet-200',
+  teal:   'from-teal-50 to-cyan-50 border-teal-200',
 };
 
 export default function KarticeView({ tema }: { tema: Tema }) {

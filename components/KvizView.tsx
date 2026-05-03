@@ -14,9 +14,11 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 const gradijent: Record<string, string> = {
-  amber: 'from-amber-400 to-orange-500',
-  green: 'from-emerald-400 to-green-500',
-  blue: 'from-blue-400 to-indigo-500',
+  amber:  'from-amber-400 to-orange-500',
+  green:  'from-emerald-400 to-green-500',
+  blue:   'from-blue-400 to-indigo-500',
+  violet: 'from-violet-400 to-purple-500',
+  teal:   'from-teal-400 to-cyan-500',
 };
 
 interface AnswerState { selected: number; correct: boolean }
