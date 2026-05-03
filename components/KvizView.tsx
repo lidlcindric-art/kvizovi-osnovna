@@ -13,12 +13,20 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
+function shuffleOptions(p: Pitanje): Pitanje {
+  const correct = p.o[p.t];
+  const shuffled = shuffle([...p.o]);
+  return { ...p, o: shuffled, t: shuffled.indexOf(correct) };
+}
+
 const gradijent: Record<string, string> = {
   amber:  'from-amber-400 to-orange-500',
   green:  'from-emerald-400 to-green-500',
   blue:   'from-blue-400 to-indigo-500',
   violet: 'from-violet-400 to-purple-500',
   teal:   'from-teal-400 to-cyan-500',
+  sky:    'from-sky-400 to-blue-500',
+  rose:   'from-rose-400 to-pink-500',
 };
 
 interface AnswerState { selected: number; correct: boolean }
@@ -31,7 +39,7 @@ export default function KvizView({ tema }: { tema: Tema }) {
   const [gotovo, setGotovo] = useState(false);
   const [cekaDalje, setCekaDalje] = useState(false);
 
-  useEffect(() => { setPitanja(shuffle(tema.pitanja)); }, [tema]);
+  useEffect(() => { setPitanja(shuffle(tema.pitanja).map(shuffleOptions)); }, [tema]);
 
   const trenutno = pitanja[index];
   const ukupno = pitanja.length;
@@ -57,7 +65,7 @@ export default function KvizView({ tema }: { tema: Tema }) {
   };
 
   const restart = () => {
-    setPitanja(shuffle(tema.pitanja));
+    setPitanja(shuffle(tema.pitanja).map(shuffleOptions));
     setIndex(0); setOdgovor(null); setTocno(0); setGotovo(false); setCekaDalje(false);
   };
 

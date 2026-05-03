@@ -10,6 +10,8 @@ const gradijent: Record<string, string> = {
   blue:   'from-blue-400 to-indigo-500',
   violet: 'from-violet-400 to-purple-500',
   teal:   'from-teal-400 to-cyan-500',
+  sky:    'from-sky-400 to-blue-500',
+  rose:   'from-rose-400 to-pink-500',
 };
 
 const modovi = [

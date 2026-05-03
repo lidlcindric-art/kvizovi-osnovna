@@ -19,6 +19,8 @@ const gradijent: Record<string, string> = {
   blue:   'from-blue-400 to-indigo-500',
   violet: 'from-violet-400 to-purple-500',
   teal:   'from-teal-400 to-cyan-500',
+  sky:    'from-sky-400 to-blue-500',
+  rose:   'from-rose-400 to-pink-500',
 };
 
 const karticaBoja: Record<string, string> = {
@@ -27,6 +29,8 @@ const karticaBoja: Record<string, string> = {
   blue:   'from-blue-50 to-indigo-50 border-blue-200',
   violet: 'from-violet-50 to-purple-50 border-violet-200',
   teal:   'from-teal-50 to-cyan-50 border-teal-200',
+  sky:    'from-sky-50 to-blue-50 border-sky-200',
+  rose:   'from-rose-50 to-pink-50 border-rose-200',
 };
 
 export default function KarticeView({ tema }: { tema: Tema }) {

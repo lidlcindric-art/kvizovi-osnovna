@@ -1,64 +1,63 @@
 import Link from 'next/link';
 
-const razredi = [
-  {
-    razred: 1,
-    naziv: '1. razred',
-    opis: 'Matematika · Priroda i društvo',
-    ikona: '🌱',
-    teme: 3,
-    boja: 'from-green-400 to-teal-500',
-  },
-  {
-    razred: 2,
-    naziv: '2. razred',
-    opis: 'Matematika · Hrvatski jezik · Priroda i društvo',
-    ikona: '📚',
-    teme: 3,
-    boja: 'from-blue-400 to-violet-500',
-  },
-  {
-    razred: 5,
-    naziv: '5. razred',
-    opis: 'Povijest · Priroda · Hrvatski · Matematika · Geografija',
-    ikona: '🎓',
-    teme: 18,
-    boja: 'from-indigo-400 to-purple-500',
-  },
+const niziBoje = [
+  { razred: 1, naziv: '1. razred', opis: 'Matematika · Priroda i društvo', ikona: '🌱', boja: 'from-green-400 to-teal-500' },
+  { razred: 2, naziv: '2. razred', opis: 'Matematika · Hrvatski · Priroda i društvo', ikona: '📚', boja: 'from-blue-400 to-violet-500' },
+  { razred: 3, naziv: '3. razred', opis: 'Matematika · Hrvatski · Priroda i društvo', ikona: '📐', boja: 'from-violet-400 to-purple-500' },
+  { razred: 4, naziv: '4. razred', opis: 'Matematika · Hrvatski · Priroda i društvo', ikona: '🌍', boja: 'from-amber-400 to-orange-500' },
 ];
+
+const visiBoje = [
+  { razred: 5, naziv: '5. razred', opis: 'Povijest · Priroda · Hrvatski · Matematika · Geografija', ikona: '🎓', boja: 'from-indigo-400 to-purple-500' },
+  { razred: 6, naziv: '6. razred', opis: 'Biologija · Geografija · Povijest · Matematika', ikona: '🔬', boja: 'from-green-500 to-teal-600' },
+  { razred: 7, naziv: '7. razred', opis: 'Fizika · Kemija · Biologija · Geografija · Povijest', ikona: '⚡', boja: 'from-sky-400 to-blue-600' },
+  { razred: 8, naziv: '8. razred', opis: 'Fizika · Kemija · Biologija · Geografija · Povijest', ikona: '🏛️', boja: 'from-rose-400 to-pink-600' },
+];
+
+function RazredKartica({ razred, naziv, opis, ikona, boja }: { razred: number; naziv: string; opis: string; ikona: string; boja: string }) {
+  return (
+    <Link
+      href={`/razred/${razred}`}
+      className={`bg-gradient-to-r ${boja} rounded-2xl p-5 text-white shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02]`}
+    >
+      <div className="flex items-center gap-4">
+        <span className="text-4xl">{ikona}</span>
+        <div className="flex-1 min-w-0">
+          <h2 className="text-xl font-black">{naziv}</h2>
+          <p className="text-white/75 text-xs mt-0.5 leading-snug">{opis}</p>
+        </div>
+        <span className="text-2xl opacity-50">→</span>
+      </div>
+    </Link>
+  );
+}
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 flex flex-col items-center justify-center p-6">
       <div className="w-full max-w-lg">
-        <div className="text-center mb-10">
+        <div className="text-center mb-8">
           <div className="text-6xl mb-4">🏫</div>
           <h1 className="text-4xl font-black text-slate-800 mb-2">Osnovna škola</h1>
-          <p className="text-slate-500 text-lg">Odaberi razred i počni učiti!</p>
+          <p className="text-slate-500">Odaberi razred i počni učiti!</p>
         </div>
 
-        <div className="flex flex-col gap-5">
-          {razredi.map((r) => (
-            <Link
-              key={r.razred}
-              href={`/razred/${r.razred}`}
-              className={`bg-gradient-to-r ${r.boja} rounded-3xl p-7 text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02]`}
-            >
-              <div className="flex items-center gap-5">
-                <span className="text-5xl">{r.ikona}</span>
-                <div className="flex-1">
-                  <h2 className="text-2xl font-black mb-1">{r.naziv}</h2>
-                  <p className="text-white/80 text-sm">{r.opis}</p>
-                  <div className="mt-2 text-white/90 text-sm font-semibold">{r.teme} {r.teme === 1 ? 'tema' : 'tema'} · 4 načina učenja</div>
-                </div>
-                <span className="text-3xl opacity-60">→</span>
-              </div>
-            </Link>
-          ))}
+        <div className="mb-6">
+          <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 px-1">Niži razredi (1–4)</h2>
+          <div className="flex flex-col gap-3">
+            {niziBoje.map(r => <RazredKartica key={r.razred} {...r} />)}
+          </div>
         </div>
 
-        <p className="text-center text-slate-400 text-sm mt-10">
-          Osnovna škola · Hrvatska
+        <div>
+          <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 px-1">Viši razredi (5–8)</h2>
+          <div className="flex flex-col gap-3">
+            {visiBoje.map(r => <RazredKartica key={r.razred} {...r} />)}
+          </div>
+        </div>
+
+        <p className="text-center text-slate-400 text-sm mt-8">
+          Osnovna škola · Hrvatska · Razredi 1–8
         </p>
       </div>
     </main>

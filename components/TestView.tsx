@@ -13,6 +13,12 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
+function shuffleOptions(p: Pitanje): Pitanje {
+  const correct = p.o[p.t];
+  const shuffled = shuffle([...p.o]);
+  return { ...p, o: shuffled, t: shuffled.indexOf(correct) };
+}
+
 function izracunajOcjenu(posto: number): { broj: number; naziv: string; boja: string; emoji: string } {
   if (posto >= 88) return { broj: 5, naziv: 'Odličan', boja: 'emerald', emoji: '🏆' };
   if (posto >= 75) return { broj: 4, naziv: 'Vrlo dobar', boja: 'blue', emoji: '🎉' };
@@ -27,6 +33,8 @@ const gradijent: Record<string, string> = {
   blue:   'from-blue-400 to-indigo-500',
   violet: 'from-violet-400 to-purple-500',
   teal:   'from-teal-400 to-cyan-500',
+  sky:    'from-sky-400 to-blue-500',
+  rose:   'from-rose-400 to-pink-500',
 };
 
 const ocjenaBoja: Record<string, string> = {
@@ -43,7 +51,7 @@ export default function TestView({ tema }: { tema: Tema }) {
   const [poslano, setPoslano] = useState(false);
 
   useEffect(() => {
-    const p = shuffle(tema.pitanja);
+    const p = shuffle(tema.pitanja).map(shuffleOptions);
     setPitanja(p);
     setOdabrani(new Array(p.length).fill(null));
   }, [tema]);
@@ -59,7 +67,7 @@ export default function TestView({ tema }: { tema: Tema }) {
   const predaj = () => { if (odgovoreno === ukupno) setPoslano(true); };
 
   const restart = () => {
-    const p = shuffle(tema.pitanja);
+    const p = shuffle(tema.pitanja).map(shuffleOptions);
     setPitanja(p);
     setOdabrani(new Array(p.length).fill(null));
     setPoslano(false);
