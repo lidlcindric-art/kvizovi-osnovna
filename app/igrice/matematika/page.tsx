@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import { spremiRezultatIgre } from '@/lib/napredak';
 
 type Operacija = '+' | '-' | '×';
 
@@ -179,8 +180,19 @@ export default function MatematikaPage() {
           </>
         )}
 
-        {zavrseno && (
-          <div className="bg-white rounded-2xl p-8 text-center shadow-lg animate-pop-in">
+        {zavrseno && <ZavrsenoSpremi tocnih={tocnih} ukupno={ukupno} pokreni={pokreni} />}
+      </div>
+    </main>
+  );
+}
+
+function ZavrsenoSpremi({ tocnih, ukupno, pokreni }: { tocnih: number; ukupno: number; pokreni: () => void }) {
+  useEffect(() => {
+    spremiRezultatIgre({ igra: 'matematika', bodovi: tocnih, detalj: `${tocnih}/${ukupno} točnih` });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return (
+        <div className="bg-white rounded-2xl p-8 text-center shadow-lg animate-pop-in">
             <div className="text-5xl mb-3">{tocnih >= 20 ? '🏆' : tocnih >= 10 ? '🎉' : '💪'}</div>
             <h2 className="text-2xl font-black text-slate-800">Vrijeme je isteklo!</h2>
             <div className="my-6 bg-amber-50 rounded-2xl p-5">
@@ -196,8 +208,5 @@ export default function MatematikaPage() {
               Pokušaj opet 🔄
             </button>
           </div>
-        )}
-      </div>
-    </main>
   );
 }

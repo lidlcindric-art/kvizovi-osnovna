@@ -4,36 +4,98 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 const RIJECI: { rijec: string; kategorija: string }[] = [
+  // Voće
   { rijec: 'JABUKA',       kategorija: 'Voće' },
   { rijec: 'NARANČA',      kategorija: 'Voće' },
   { rijec: 'BANANA',       kategorija: 'Voće' },
   { rijec: 'ŠLJIVA',       kategorija: 'Voće' },
   { rijec: 'GROŽĐE',       kategorija: 'Voće' },
+  { rijec: 'JAGODA',       kategorija: 'Voće' },
+  { rijec: 'LUBENICA',     kategorija: 'Voće' },
+  { rijec: 'BRESKVA',      kategorija: 'Voće' },
+  { rijec: 'KRUŠKA',       kategorija: 'Voće' },
+  { rijec: 'TREŠNJA',      kategorija: 'Voće' },
+  { rijec: 'MARELICA',     kategorija: 'Voće' },
+  { rijec: 'KIWI',         kategorija: 'Voće' },
+  // Povrće
   { rijec: 'MRKVA',        kategorija: 'Povrće' },
   { rijec: 'TIKVICA',      kategorija: 'Povrće' },
   { rijec: 'KRUMPIR',      kategorija: 'Povrće' },
   { rijec: 'PAPRIKA',      kategorija: 'Povrće' },
   { rijec: 'RAJČICA',      kategorija: 'Povrće' },
-  { rijec: 'MATEMATI KA',  kategorija: 'Predmet' },
+  { rijec: 'LUKA',         kategorija: 'Povrće' },
+  { rijec: 'ŠPINAT',       kategorija: 'Povrće' },
+  { rijec: 'BROKULA',      kategorija: 'Povrće' },
+  { rijec: 'KUPUS',        kategorija: 'Povrće' },
+  { rijec: 'KRASTAVAC',    kategorija: 'Povrće' },
+  // Predmeti
+  { rijec: 'MATEMATIKA',   kategorija: 'Predmet' },
   { rijec: 'POVIJEST',     kategorija: 'Predmet' },
   { rijec: 'GEOGRAFIJA',   kategorija: 'Predmet' },
   { rijec: 'BIOLOGIJA',    kategorija: 'Predmet' },
   { rijec: 'KEMIJA',       kategorija: 'Predmet' },
+  { rijec: 'FIZIKA',       kategorija: 'Predmet' },
+  { rijec: 'ENGLESKI',     kategorija: 'Predmet' },
+  { rijec: 'GLAZBA',       kategorija: 'Predmet' },
+  { rijec: 'LIKOVNA',      kategorija: 'Predmet' },
+  // Životinje
   { rijec: 'LEPTIR',       kategorija: 'Životinja' },
   { rijec: 'MEDVJED',      kategorija: 'Životinja' },
-  { rijec: 'VEVERICA',     kategorija: 'Životinja' },
-  { rijec: 'LAVICA',       kategorija: 'Životinja' },
+  { rijec: 'VJEVERICA',    kategorija: 'Životinja' },
   { rijec: 'KORNJAČA',     kategorija: 'Životinja' },
-  { rijec: 'HRVATSKA',     kategorija: 'Zemlja' },
-  { rijec: 'EUROPA',       kategorija: 'Kontinent' },
+  { rijec: 'ZEBRA',        kategorija: 'Životinja' },
+  { rijec: 'PINGVIN',      kategorija: 'Životinja' },
+  { rijec: 'KROKODIL',     kategorija: 'Životinja' },
+  { rijec: 'SLON',         kategorija: 'Životinja' },
+  { rijec: 'ŽIRAFA',       kategorija: 'Životinja' },
+  { rijec: 'DELFIN',       kategorija: 'Životinja' },
+  { rijec: 'ORAO',         kategorija: 'Životinja' },
+  { rijec: 'VRANA',        kategorija: 'Životinja' },
+  // Gradovi Hrvatske
   { rijec: 'ZAGREB',       kategorija: 'Grad' },
   { rijec: 'SPLIT',        kategorija: 'Grad' },
   { rijec: 'DUBROVNIK',    kategorija: 'Grad' },
+  { rijec: 'RIJEKA',       kategorija: 'Grad' },
+  { rijec: 'OSIJEK',       kategorija: 'Grad' },
+  { rijec: 'ZADAR',        kategorija: 'Grad' },
+  { rijec: 'PULA',         kategorija: 'Grad' },
+  { rijec: 'ŠIBENIK',      kategorija: 'Grad' },
+  // Priroda
   { rijec: 'SUNCE',        kategorija: 'Priroda' },
   { rijec: 'PLANINA',      kategorija: 'Priroda' },
-  { rijec: 'RIJEKA',       kategorija: 'Priroda' },
   { rijec: 'OBLAK',        kategorija: 'Priroda' },
   { rijec: 'SNIJEG',       kategorija: 'Priroda' },
+  { rijec: 'OCEAN',        kategorija: 'Priroda' },
+  { rijec: 'ŠUMA',         kategorija: 'Priroda' },
+  { rijec: 'VULKAN',       kategorija: 'Priroda' },
+  { rijec: 'POTRES',       kategorija: 'Priroda' },
+  // Dijelovi tijela
+  { rijec: 'SRCE',         kategorija: 'Tijelo' },
+  { rijec: 'MOZAK',        kategorija: 'Tijelo' },
+  { rijec: 'KOLJENO',      kategorija: 'Tijelo' },
+  { rijec: 'LAKAT',        kategorija: 'Tijelo' },
+  { rijec: 'PRST',         kategorija: 'Tijelo' },
+  { rijec: 'REBRO',        kategorija: 'Tijelo' },
+  // Zanimanja
+  { rijec: 'LIJEČNIK',     kategorija: 'Zanimanje' },
+  { rijec: 'UČITELJ',      kategorija: 'Zanimanje' },
+  { rijec: 'VATROGASAC',   kategorija: 'Zanimanje' },
+  { rijec: 'PILOT',        kategorija: 'Zanimanje' },
+  { rijec: 'ASTRONOM',     kategorija: 'Zanimanje' },
+  { rijec: 'ARHITEKT',     kategorija: 'Zanimanje' },
+  // Instrumenti
+  { rijec: 'VIOLINA',      kategorija: 'Instrument' },
+  { rijec: 'KLAVIR',       kategorija: 'Instrument' },
+  { rijec: 'GITARA',       kategorija: 'Instrument' },
+  { rijec: 'FLAUTA',       kategorija: 'Instrument' },
+  { rijec: 'BUBANJ',       kategorija: 'Instrument' },
+  { rijec: 'TRUBA',        kategorija: 'Instrument' },
+  // Boje
+  { rijec: 'LJUBIČASTA',   kategorija: 'Boja' },
+  { rijec: 'NARANČASTA',   kategorija: 'Boja' },
+  { rijec: 'TIRKIZNA',     kategorija: 'Boja' },
+  { rijec: 'SMEĐA',        kategorija: 'Boja' },
+  { rijec: 'SREBRNA',      kategorija: 'Boja' },
 ];
 
 const MAX_POGRESAKA = 6;
@@ -62,9 +124,19 @@ export default function VjesanjePage() {
   const [odabrana, setOdabrana] = useState<Set<string>>(new Set());
   const [pogresaka, setPogresaka] = useState(0);
   const [stanje, setStanje] = useState<'igra' | 'pobjeda' | 'poraz' | 'start'>('start');
+  const [odigrano, setOdigrano] = useState<Set<number>>(new Set());
 
   function novaIgra() {
-    const odabir = RIJECI[Math.floor(Math.random() * RIJECI.length)];
+    const dostupni = RIJECI.map((_, i) => i).filter(i => !odigrano.has(i));
+    const pool = dostupni.length > 0 ? dostupni : RIJECI.map((_, i) => i);
+    const idx = pool[Math.floor(Math.random() * pool.length)];
+    const odabir = RIJECI[idx];
+    setOdigrano(prev => {
+      const next = new Set(prev);
+      next.add(idx);
+      if (next.size >= RIJECI.length) return new Set();
+      return next;
+    });
     setRijec(odabir.rijec);
     setKategorija(odabir.kategorija);
     setOdabrana(new Set());
@@ -114,7 +186,7 @@ export default function VjesanjePage() {
           <div className="bg-white rounded-2xl p-8 text-center shadow-lg">
             <div className="text-5xl mb-4">🔤</div>
             <h2 className="text-2xl font-black text-slate-800 mb-2">Vješanje</h2>
-            <p className="text-slate-500 text-sm mb-6">Pogodi skrivenu hrvatsku riječ slovo po slovo. Imaš {MAX_POGRESAKA} pokušaja.</p>
+            <p className="text-slate-500 text-sm mb-6">Pogodi skrivenu hrvatsku riječ slovo po slovo. Imaš {MAX_POGRESAKA} pokušaja. Baza: {RIJECI.length} riječi!</p>
             <button onClick={novaIgra} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-xl text-lg transition-colors">
               Počni! 🎯
             </button>

@@ -1,8 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { ucitajNapredak, obrisiNapredak, prosjecniRezultatPoPredemtu, type RezultatKviza } from '@/lib/napredak';
+import {
+  ucitajNapredak, obrisiNapredak, prosjecniRezultatPoPredemtu,
+  najboljiBodIgre, spremiIme, spremiRazred,
+  type RezultatKviza, type RezultatIgre,
+} from '@/lib/napredak';
 
 const bojePredmeta: Record<string, string> = {
   'Matematika':        'bg-violet-500',
@@ -18,16 +22,33 @@ const bojePredmeta: Record<string, string> = {
   'Fizika':            'bg-sky-500',
   'Domaćinstvo':       'bg-pink-500',
   'Glazbena kultura':  'bg-rose-500',
+  'Likovna kultura':   'bg-fuchsia-500',
+  'Tehnička kultura':  'bg-cyan-600',
+  'Informatika':       'bg-blue-600',
 };
 
-function BojaPredmeta(predmet: string) {
+const igraIkone: Record<string, string> = {
+  memorija: '🃏',
+  matematika: '⚡',
+  vjesanje: '🔤',
+  razvrstavanje: '🗂️',
+  'kviz-utrka': '🏁',
+};
+const igraNazivi: Record<string, string> = {
+  memorija: 'Memorija',
+  matematika: 'Matematika',
+  vjesanje: 'Vješanje',
+  razvrstavanje: 'Razvrstavanje',
+  'kviz-utrka': 'Kviz utrka',
+};
+
+function bojaPredmeta(predmet: string) {
   return bojePredmeta[predmet] ?? 'bg-slate-500';
 }
 
 function BarChart({ prosjeci }: { prosjeci: Record<string, number> }) {
   const unosi = Object.entries(prosjeci);
   if (unosi.length === 0) return null;
-
   return (
     <div className="mt-4">
       <div className="flex items-end gap-2 h-40 px-2">
@@ -62,19 +83,58 @@ function formatDatum(iso: string) {
   return d.toLocaleDateString('hr-HR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
 }
 
+function izracunajStreak(rezultati: RezultatKviza[]): number {
+  if (rezultati.length === 0) return 0;
+  const dani = new Set(rezultati.map(r => r.datum.slice(0, 10)));
+  const sortiraniDani = Array.from(dani).sort().reverse();
+  const danas = new Date().toISOString().slice(0, 10);
+  const jucer = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  if (sortiraniDani[0] !== danas && sortiraniDani[0] !== jucer) return 0;
+  let streak = 1;
+  for (let i = 1; i < sortiraniDani.length; i++) {
+    const razlika = (new Date(sortiraniDani[i - 1]).getTime() - new Date(sortiraniDani[i]).getTime()) / 86400000;
+    if (razlika === 1) streak++;
+    else break;
+  }
+  return streak;
+}
+
 export default function ProfilPage() {
   const [rezultati, setRezultati] = useState<RezultatKviza[]>([]);
+  const [igre, setIgre] = useState<RezultatIgre[]>([]);
+  const [ime, setIme] = useState('');
+  const [razred, setRazred] = useState(0);
+  const [ureduje, setUreduje] = useState(false);
+  const [imeInput, setImeInput] = useState('');
   const [ucitano, setUcitano] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setRezultati(ucitajNapredak().rezultati);
+    const n = ucitajNapredak();
+    setRezultati(n.rezultati);
+    setIgre(n.igre);
+    setIme(n.ime);
+    setImeInput(n.ime);
+    setRazred(n.razred);
     setUcitano(true);
   }, []);
+
+  useEffect(() => {
+    if (ureduje) inputRef.current?.focus();
+  }, [ureduje]);
+
+  const spremiImeHandler = () => {
+    const novi = imeInput.trim();
+    spremiIme(novi);
+    setIme(novi);
+    setUreduje(false);
+  };
 
   const obrisi = () => {
     if (confirm('Jesi li siguran/na? Svi podaci o napretku bit će obrisani.')) {
       obrisiNapredak();
       setRezultati([]);
+      setIgre([]);
     }
   };
 
@@ -84,7 +144,16 @@ export default function ProfilPage() {
     ? Math.round(rezultati.reduce((s, r) => s + r.posto, 0) / ukupnoKvizova)
     : 0;
   const najboljiPredmet = Object.entries(prosjeci).sort((a, b) => b[1] - a[1])[0]?.[0] ?? '—';
+  const streak = izracunajStreak(rezultati);
   const zadnjih10 = [...rezultati].reverse().slice(0, 10);
+
+  const igreStatistike = (['memorija', 'matematika', 'vjesanje', 'razvrstavanje', 'kviz-utrka'] as const)
+    .map(igra => ({
+      igra,
+      najbolji: najboljiBodIgre(igre, igra),
+      odigrano: igre.filter(i => i.igra === igra).length,
+    }))
+    .filter(s => s.odigrano > 0);
 
   if (!ucitano) {
     return (
@@ -98,36 +167,78 @@ export default function ProfilPage() {
     <main className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 p-4">
       <div className="max-w-xl mx-auto pt-4 pb-10 space-y-4">
 
-        {/* Header */}
         <div className="flex items-center justify-between mb-2">
           <Link href="/" className="text-slate-500 hover:text-slate-700 font-semibold text-sm">← Početna</Link>
         </div>
 
+        {/* Header s imenom i razredom */}
         <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-3xl p-6 text-white">
           <div className="text-4xl mb-2">🎓</div>
-          <h1 className="text-2xl font-black">Moj napredak</h1>
-          <p className="text-white/75 text-sm mt-1">Prati svoje rezultate i napredak</p>
+          {ureduje ? (
+            <div className="flex gap-2 items-center">
+              <input
+                ref={inputRef}
+                value={imeInput}
+                onChange={e => setImeInput(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && spremiImeHandler()}
+                placeholder="Tvoje ime..."
+                className="flex-1 rounded-xl px-3 py-2 text-slate-800 font-bold text-base outline-none"
+                maxLength={30}
+              />
+              <button onClick={spremiImeHandler} className="bg-white/20 hover:bg-white/30 px-3 py-2 rounded-xl font-black text-sm">
+                ✓
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <h1 className="text-2xl font-black">{ime || 'Moj napredak'}</h1>
+              <button onClick={() => setUreduje(true)} className="text-white/60 hover:text-white text-lg">✏️</button>
+            </div>
+          )}
+          {/* Odabir razreda */}
+          <div className="flex flex-wrap gap-1.5 mt-3">
+            {[1,2,3,4,5,6,7,8].map(r => (
+              <button
+                key={r}
+                onClick={() => { setRazred(r); spremiRazred(r); }}
+                className={`px-2.5 py-1 rounded-lg text-xs font-black transition-all ${
+                  razred === r ? 'bg-white text-indigo-600' : 'bg-white/20 hover:bg-white/30 text-white'
+                }`}
+              >
+                {r}. r
+              </button>
+            ))}
+          </div>
+          <p className="text-white/60 text-xs mt-2">
+            {razred ? `${razred}. razred` : 'Odaberi razred'}
+          </p>
         </div>
 
         {/* Statistike */}
-        <div className="grid grid-cols-3 gap-3">
-          <div className="bg-white rounded-2xl p-4 text-center shadow-sm">
-            <div className="text-3xl font-black text-indigo-600">{ukupnoKvizova}</div>
-            <div className="text-xs text-slate-500 mt-1 font-semibold">Odrađenih</div>
+        <div className="grid grid-cols-4 gap-2">
+          <div className="bg-white rounded-2xl p-3 text-center shadow-sm">
+            <div className="text-2xl font-black text-indigo-600">{ukupnoKvizova}</div>
+            <div className="text-[10px] text-slate-500 mt-0.5 font-semibold">Odrađenih</div>
           </div>
-          <div className="bg-white rounded-2xl p-4 text-center shadow-sm">
-            <div className={`text-3xl font-black ${prosjecniPosto >= 80 ? 'text-emerald-600' : prosjecniPosto >= 60 ? 'text-blue-600' : prosjecniPosto >= 40 ? 'text-amber-600' : 'text-red-600'}`}>
+          <div className="bg-white rounded-2xl p-3 text-center shadow-sm">
+            <div className={`text-2xl font-black ${prosjecniPosto >= 80 ? 'text-emerald-600' : prosjecniPosto >= 60 ? 'text-blue-600' : prosjecniPosto >= 40 ? 'text-amber-600' : 'text-red-600'}`}>
               {ukupnoKvizova > 0 ? `${prosjecniPosto}%` : '—'}
             </div>
-            <div className="text-xs text-slate-500 mt-1 font-semibold">Prosjek</div>
+            <div className="text-[10px] text-slate-500 mt-0.5 font-semibold">Prosjek</div>
           </div>
-          <div className="bg-white rounded-2xl p-4 text-center shadow-sm">
-            <div className="text-xs font-black text-slate-700 leading-tight">{najboljiPredmet === '—' ? '—' : najboljiPredmet.split(' ')[0]}</div>
-            <div className="text-xs text-slate-500 mt-1 font-semibold">Najboljii</div>
+          <div className="bg-white rounded-2xl p-3 text-center shadow-sm">
+            <div className="text-2xl font-black text-amber-500">{streak > 0 ? `${streak}🔥` : '0'}</div>
+            <div className="text-[10px] text-slate-500 mt-0.5 font-semibold">Streak</div>
+          </div>
+          <div className="bg-white rounded-2xl p-3 text-center shadow-sm overflow-hidden">
+            <div className="text-xs font-black text-slate-700 leading-tight truncate" title={najboljiPredmet}>
+              {najboljiPredmet === '—' ? '—' : najboljiPredmet.split(' ')[0]}
+            </div>
+            <div className="text-[10px] text-slate-500 mt-0.5 font-semibold">Najbolji</div>
           </div>
         </div>
 
-        {/* Graf */}
+        {/* Graf po predmetima */}
         {Object.keys(prosjeci).length > 0 && (
           <div className="bg-white rounded-2xl p-5 shadow-sm">
             <h2 className="font-black text-slate-800 text-base mb-1">📊 Prosjek po predmetu</h2>
@@ -138,6 +249,27 @@ export default function ProfilPage() {
               <span className="inline-block w-2 h-2 bg-red-500 rounded ml-2 mr-1" />&lt;40%
             </p>
             <BarChart prosjeci={prosjeci} />
+          </div>
+        )}
+
+        {/* Rezultati igrica */}
+        {igreStatistike.length > 0 && (
+          <div className="bg-white rounded-2xl p-5 shadow-sm">
+            <h2 className="font-black text-slate-800 text-base mb-3">🎮 Rezultati igrica</h2>
+            <div className="grid grid-cols-2 gap-2">
+              {igreStatistike.map(s => (
+                <div key={s.igra} className="bg-slate-50 rounded-xl p-3 flex items-center gap-3">
+                  <span className="text-2xl">{igraIkone[s.igra]}</span>
+                  <div className="min-w-0">
+                    <p className="text-sm font-black text-slate-800">{igraNazivi[s.igra]}</p>
+                    <p className="text-xs text-slate-500">
+                      Rekord: <span className="font-bold text-indigo-600">{s.najbolji}</span>
+                      {' · '}{s.odigrano}×
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
@@ -154,12 +286,12 @@ export default function ProfilPage() {
             <div className="space-y-2">
               {zadnjih10.map((r, i) => (
                 <div key={i} className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
-                  <div className={`w-2 h-2 rounded-full shrink-0 ${BojaPredmeta(r.predmet)}`} />
+                  <div className={`w-2 h-2 rounded-full shrink-0 ${bojaPredmeta(r.predmet)}`} />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-bold text-slate-800 truncate">{r.temaNaziv}</p>
                     <p className="text-xs text-slate-400">{r.predmet} · {r.vrsta === 'kviz' ? '🧠 Kviz' : '📝 Test'} · {formatDatum(r.datum)}</p>
                   </div>
-                  <div className={`text-sm font-black px-2 py-1 rounded-lg ${r.posto >= 80 ? 'bg-emerald-100 text-emerald-700' : r.posto >= 60 ? 'bg-blue-100 text-blue-700' : r.posto >= 40 ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'}`}>
+                  <div className={`text-sm font-black px-2 py-1 rounded-lg shrink-0 ${r.posto >= 80 ? 'bg-emerald-100 text-emerald-700' : r.posto >= 60 ? 'bg-blue-100 text-blue-700' : r.posto >= 40 ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'}`}>
                     {r.posto}%
                   </div>
                 </div>
@@ -169,7 +301,7 @@ export default function ProfilPage() {
         </div>
 
         {/* Obriši podatke */}
-        {rezultati.length > 0 && (
+        {(rezultati.length > 0 || igre.length > 0) && (
           <button
             onClick={obrisi}
             className="w-full py-3 rounded-2xl border-2 border-red-200 text-red-600 font-bold text-sm hover:bg-red-50 transition-colors"

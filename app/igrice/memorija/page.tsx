@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { spremiRezultatIgre } from '@/lib/napredak';
 
 const PAROVI = [
   { a: '🐶', b: 'pas' },
@@ -53,6 +54,12 @@ export default function MemorijaPage() {
     const t = setInterval(() => setSekunde(Math.floor((Date.now() - vrijemeStart) / 1000)), 500);
     return () => clearInterval(t);
   }, [gotovo, vrijemeStart]);
+
+  useEffect(() => {
+    if (!gotovo || potezi === 0) return;
+    const bodovi = Math.max(0, 200 - potezi * 5 - Math.floor(sekunde / 2));
+    spremiRezultatIgre({ igra: 'memorija', bodovi, detalj: `${potezi} poteza · ${sekunde}s` });
+  }, [gotovo]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function novaIgra() {
     setKartice(stvoriKartice(PAROVI));

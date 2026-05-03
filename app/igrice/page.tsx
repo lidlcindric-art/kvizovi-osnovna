@@ -29,6 +29,13 @@ const igrice = [
     ikona: '🗂️',
     boja: 'from-green-400 to-teal-500',
   },
+  {
+    href: '/igrice/kviz-utrka',
+    naziv: 'Kviz utrka',
+    opis: 'Odgovaraj brzo — 20 sekundi po pitanju, skupljaj bodove!',
+    ikona: '🏁',
+    boja: 'from-rose-400 to-orange-500',
+  },
 ];
 
 export default function IgricePage() {

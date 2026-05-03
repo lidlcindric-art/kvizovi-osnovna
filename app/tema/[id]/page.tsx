@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { getTema, TEMA_IDS } from '@/lib/pitanja';
+import { getTema, getRazredZaTemu, TEMA_IDS } from '@/lib/pitanja';
 
 interface Props { params: Promise<{ id: string }> }
 
@@ -26,10 +26,14 @@ export default async function TemaPage({ params }: Props) {
   const tema = getTema(id);
   if (!tema) notFound();
 
+  const razred = getRazredZaTemu(id);
+  const natrag = razred ? `/razred/${razred}` : '/';
+  const natragNaziv = razred ? `← ${razred}. razred` : '← Početna';
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 p-6">
       <div className="max-w-xl mx-auto pt-4">
-        <Link href="/" className="text-slate-500 hover:text-slate-700 font-semibold text-sm">← Sve teme</Link>
+        <Link href={natrag} className="text-slate-500 hover:text-slate-700 font-semibold text-sm">{natragNaziv}</Link>
 
         {/* Hero */}
         <div className={`bg-gradient-to-r ${gradijent[tema.boja]} rounded-3xl p-8 mt-4 mb-8 text-white`}>

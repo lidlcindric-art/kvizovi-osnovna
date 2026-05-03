@@ -16,6 +16,9 @@ import { njemackiTeme } from './data/njemacki';
 import { engleskiTeme } from './data/engleski';
 import { domacinstvo } from './data/domacinstvo';
 import { glazbaTeme } from './data/glazba';
+import { likovnaTeme } from './data/likovna';
+import { tehnickaТeme } from './data/tehnicka';
+import { informatikaTeme } from './data/informatika';
 
 const [njemacki4, njemacki5, njemacki6, njemacki7, njemacki8] = njemackiTeme;
 const [engleski1, engleski2, engleski3, engleski4, engleski5, engleski6, engleski7, engleski8] = engleskiTeme;
@@ -23,14 +26,14 @@ const [engleski1, engleski2, engleski3, engleski4, engleski5, engleski6, englesk
 const razred5Teme = [...povijest, ...priroda, ...hrvatskeТeme, ...matematickeTeme, ...geografijaTeme, engleski5, njemacki5];
 
 export const temePoRazredu: Record<number, typeof razred1Teme> = {
-  1: [...razred1Teme, engleski1, ...glazbaTeme],
-  2: [...razred2Teme, engleski2, ...glazbaTeme],
-  3: [...razred3Teme, engleski3, ...glazbaTeme],
-  4: [...razred4Teme, engleski4, njemacki4, ...glazbaTeme],
-  5: [...razred5Teme, ...domacinstvo, ...glazbaTeme],
-  6: [...razred6Teme, engleski6, njemacki6, ...domacinstvo, ...glazbaTeme],
-  7: [...razred7Teme, engleski7, njemacki7, ...domacinstvo, ...glazbaTeme],
-  8: [...razred8Teme, engleski8, njemacki8, ...domacinstvo, ...glazbaTeme],
+  1: [...razred1Teme, engleski1, ...glazbaTeme, ...likovnaTeme],
+  2: [...razred2Teme, engleski2, ...glazbaTeme, ...likovnaTeme],
+  3: [...razred3Teme, engleski3, ...glazbaTeme, ...likovnaTeme],
+  4: [...razred4Teme, engleski4, njemacki4, ...glazbaTeme, ...likovnaTeme],
+  5: [...razred5Teme, ...domacinstvo, ...glazbaTeme, ...likovnaTeme, ...tehnickaТeme, ...informatikaTeme],
+  6: [...razred6Teme, engleski6, njemacki6, ...domacinstvo, ...glazbaTeme, ...likovnaTeme, ...tehnickaТeme, ...informatikaTeme],
+  7: [...razred7Teme, engleski7, njemacki7, ...domacinstvo, ...glazbaTeme, ...likovnaTeme, ...tehnickaТeme, ...informatikaTeme],
+  8: [...razred8Teme, engleski8, njemacki8, ...domacinstvo, ...glazbaTeme, ...likovnaTeme, ...tehnickaТeme, ...informatikaTeme],
 };
 
 export const teme = Object.values(temePoRazredu).flat();
@@ -41,6 +44,13 @@ export function getTema(id: string) {
 
 export function getTemeZaRazred(razred: number) {
   return temePoRazredu[razred] ?? [];
+}
+
+export function getRazredZaTemu(temaId: string): number | null {
+  for (const [razredStr, teme] of Object.entries(temePoRazredu)) {
+    if (teme.some(t => t.id === temaId)) return Number(razredStr);
+  }
+  return null;
 }
 
 export const TEMA_IDS = teme.map((t) => t.id);
