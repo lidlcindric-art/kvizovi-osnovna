@@ -12,7 +12,8 @@ export interface Kartica {
 
 export interface SekcijaSkripte {
   naslov: string;
-  tekst: string;
+  tekst?: string;
+  sadrzaj?: string[];
 }
 
 export interface Tema {

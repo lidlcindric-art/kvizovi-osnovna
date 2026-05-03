@@ -1,4 +1,4 @@
-import type { Tema } from '../pitanja';
+import type { Tema } from '../types';
 
 const stanicaTkiva: Tema = {
   id: 'stanica-tkiva',

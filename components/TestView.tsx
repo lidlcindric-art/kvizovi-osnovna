@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import type { Tema, Pitanje } from '@/lib/pitanja';
+import { spremiRezultat } from '@/lib/napredak';
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -35,6 +36,8 @@ const gradijent: Record<string, string> = {
   teal:   'from-teal-400 to-cyan-500',
   sky:    'from-sky-400 to-blue-500',
   rose:   'from-rose-400 to-pink-500',
+  indigo: 'from-indigo-500 to-blue-600',
+  orange: 'from-orange-400 to-amber-500',
 };
 
 const ocjenaBoja: Record<string, string> = {
@@ -64,7 +67,13 @@ export default function TestView({ tema }: { tema: Tema }) {
     setOdabrani(prev => { const next = [...prev]; next[pitanjeIdx] = opcijIdx; return next; });
   };
 
-  const predaj = () => { if (odgovoreno === ukupno) setPoslano(true); };
+  const predaj = () => {
+    if (odgovoreno < ukupno) return;
+    const tocno = pitanja.filter((p, i) => odabrani[i] === p.t).length;
+    const posto = Math.round((tocno / ukupno) * 100);
+    spremiRezultat({ temaId: tema.id, temaNaziv: tema.naziv, predmet: tema.predmet, vrsta: 'test', tocno, ukupno, posto });
+    setPoslano(true);
+  };
 
   const restart = () => {
     const p = shuffle(tema.pitanja).map(shuffleOptions);

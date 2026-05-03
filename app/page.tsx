@@ -1,17 +1,17 @@
 import Link from 'next/link';
 
 const niziBoje = [
-  { razred: 1, naziv: '1. razred', opis: 'Matematika · Priroda i društvo', ikona: '🌱', boja: 'from-green-400 to-teal-500' },
-  { razred: 2, naziv: '2. razred', opis: 'Matematika · Hrvatski · Priroda i društvo', ikona: '📚', boja: 'from-blue-400 to-violet-500' },
-  { razred: 3, naziv: '3. razred', opis: 'Matematika · Hrvatski · Priroda i društvo', ikona: '📐', boja: 'from-violet-400 to-purple-500' },
-  { razred: 4, naziv: '4. razred', opis: 'Matematika · Hrvatski · Priroda i društvo', ikona: '🌍', boja: 'from-amber-400 to-orange-500' },
+  { razred: 1, naziv: '1. razred', opis: 'Matematika · Hrvatski · Engleski · Priroda i društvo', ikona: '🌱', boja: 'from-green-400 to-teal-500' },
+  { razred: 2, naziv: '2. razred', opis: 'Matematika · Hrvatski · Engleski · Priroda i društvo', ikona: '📚', boja: 'from-blue-400 to-violet-500' },
+  { razred: 3, naziv: '3. razred', opis: 'Matematika · Hrvatski · Engleski · Priroda i društvo', ikona: '📐', boja: 'from-violet-400 to-purple-500' },
+  { razred: 4, naziv: '4. razred', opis: 'Matematika · Hrvatski · Engleski · Njemački · Priroda i društvo', ikona: '🌍', boja: 'from-amber-400 to-orange-500' },
 ];
 
 const visiBoje = [
-  { razred: 5, naziv: '5. razred', opis: 'Povijest · Priroda · Hrvatski · Matematika · Geografija', ikona: '🎓', boja: 'from-indigo-400 to-purple-500' },
-  { razred: 6, naziv: '6. razred', opis: 'Biologija · Geografija · Povijest · Matematika', ikona: '🔬', boja: 'from-green-500 to-teal-600' },
-  { razred: 7, naziv: '7. razred', opis: 'Fizika · Kemija · Biologija · Geografija · Povijest', ikona: '⚡', boja: 'from-sky-400 to-blue-600' },
-  { razred: 8, naziv: '8. razred', opis: 'Fizika · Kemija · Biologija · Geografija · Povijest', ikona: '🏛️', boja: 'from-rose-400 to-pink-600' },
+  { razred: 5, naziv: '5. razred', opis: 'Matematika · Hrvatski · Engleski · Njemački · Geografija · Povijest', ikona: '🎓', boja: 'from-indigo-400 to-purple-500' },
+  { razred: 6, naziv: '6. razred', opis: 'Biologija · Geografija · Engleski · Njemački · Domaćinstvo', ikona: '🔬', boja: 'from-green-500 to-teal-600' },
+  { razred: 7, naziv: '7. razred', opis: 'Fizika · Kemija · Biologija · Engleski · Njemački · Geografija', ikona: '⚡', boja: 'from-sky-400 to-blue-600' },
+  { razred: 8, naziv: '8. razred', opis: 'Fizika · Kemija · Biologija · Engleski · Njemački · Povijest', ikona: '🏛️', boja: 'from-rose-400 to-pink-600' },
 ];
 
 function RazredKartica({ razred, naziv, opis, ikona, boja }: { razred: number; naziv: string; opis: string; ikona: string; boja: string }) {
@@ -56,7 +56,15 @@ export default function Home() {
           </div>
         </div>
 
-        <p className="text-center text-slate-400 text-sm mt-8">
+        <div className="mt-6 flex justify-center gap-3">
+          <Link href="/profil" className="flex items-center gap-2 px-5 py-2.5 bg-white/80 hover:bg-white rounded-2xl shadow-sm text-slate-600 font-bold text-sm transition-all hover:shadow-md">
+            📊 Moj napredak
+          </Link>
+          <Link href="/igrice" className="flex items-center gap-2 px-5 py-2.5 bg-white/80 hover:bg-white rounded-2xl shadow-sm text-slate-600 font-bold text-sm transition-all hover:shadow-md">
+            🎮 Igrice
+          </Link>
+        </div>
+        <p className="text-center text-slate-400 text-sm mt-4">
           Osnovna škola · Hrvatska · Razredi 1–8
         </p>
       </div>

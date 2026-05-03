@@ -9,6 +9,8 @@ const gradijent: Record<string, string> = {
   teal:   'from-teal-400 to-cyan-500',
   sky:    'from-sky-400 to-blue-500',
   rose:   'from-rose-400 to-pink-500',
+  indigo: 'from-indigo-500 to-blue-600',
+  orange: 'from-orange-400 to-amber-500',
 };
 
 export default function SkriptaView({ tema }: { tema: Tema }) {
@@ -38,18 +40,25 @@ export default function SkriptaView({ tema }: { tema: Tema }) {
                 {sekcija.naslov}
               </h2>
               <div className="space-y-3">
-                {sekcija.tekst.split('\n').map((odlomak, j) => {
-                  if (!odlomak.trim()) return null;
-                  if (odlomak.startsWith('•')) {
-                    return (
+                {sekcija.sadrzaj
+                  ? sekcija.sadrzaj.map((r, j) => (
                       <div key={j} className="flex items-start gap-2 text-slate-600 leading-relaxed">
                         <span className="text-slate-400 mt-0.5 shrink-0">•</span>
-                        <span>{odlomak.slice(1).trim()}</span>
+                        <span>{r}</span>
                       </div>
-                    );
-                  }
-                  return <p key={j} className="text-slate-600 leading-relaxed">{odlomak}</p>;
-                })}
+                    ))
+                  : (sekcija.tekst ?? '').split('\n').map((odlomak, j) => {
+                      if (!odlomak.trim()) return null;
+                      if (odlomak.startsWith('•')) {
+                        return (
+                          <div key={j} className="flex items-start gap-2 text-slate-600 leading-relaxed">
+                            <span className="text-slate-400 mt-0.5 shrink-0">•</span>
+                            <span>{odlomak.slice(1).trim()}</span>
+                          </div>
+                        );
+                      }
+                      return <p key={j} className="text-slate-600 leading-relaxed">{odlomak}</p>;
+                    })}
               </div>
             </section>
           ))}

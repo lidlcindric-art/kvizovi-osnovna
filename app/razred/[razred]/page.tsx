@@ -12,6 +12,8 @@ const pozadina: Record<string, string> = {
   teal:   'bg-teal-50 hover:bg-teal-100 border-teal-200 hover:border-teal-400',
   sky:    'bg-sky-50 hover:bg-sky-100 border-sky-200 hover:border-sky-400',
   rose:   'bg-rose-50 hover:bg-rose-100 border-rose-200 hover:border-rose-400',
+  indigo: 'bg-indigo-50 hover:bg-indigo-100 border-indigo-200 hover:border-indigo-400',
+  orange: 'bg-orange-50 hover:bg-orange-100 border-orange-200 hover:border-orange-400',
 };
 
 const textBoja: Record<string, string> = {
@@ -22,6 +24,8 @@ const textBoja: Record<string, string> = {
   teal:   'text-teal-700',
   sky:    'text-sky-700',
   rose:   'text-rose-700',
+  indigo: 'text-indigo-700',
+  orange: 'text-orange-700',
 };
 
 const badge: Record<string, string> = {
@@ -32,6 +36,8 @@ const badge: Record<string, string> = {
   teal:   'bg-teal-200 text-teal-800',
   sky:    'bg-sky-200 text-sky-800',
   rose:   'bg-rose-200 text-rose-800',
+  indigo: 'bg-indigo-200 text-indigo-800',
+  orange: 'bg-orange-200 text-orange-800',
 };
 
 const predmetBadge: Record<string, string> = {
@@ -42,6 +48,8 @@ const predmetBadge: Record<string, string> = {
   teal:   'bg-teal-100 text-teal-600',
   sky:    'bg-sky-100 text-sky-600',
   rose:   'bg-rose-100 text-rose-600',
+  indigo: 'bg-indigo-100 text-indigo-600',
+  orange: 'bg-orange-100 text-orange-600',
 };
 
 const razredInfo: Record<number, { naziv: string; opis: string; ikona: string; boja: string }> = {

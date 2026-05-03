@@ -10,8 +10,12 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: 'Kvizovi — 5. razred',
-  description: 'Edukativni kvizovi za 5. razred osnovne škole: Rimsko društvo, Priroda – Tlo, Hrvatski – Pridjevi',
+  title: 'Kvizovi — Osnovna škola',
+  description: 'Edukativni kvizovi za osnovnu školu (razredi 1–8): Matematika, Hrvatski, Engleski, Njemački, Priroda i društvo, Geografija, Povijest i još mnogo toga.',
+  manifest: '/manifest.json',
+  themeColor: '#6366f1',
+  appleWebApp: { capable: true, statusBarStyle: 'default', title: 'Kvizovi' },
+  viewport: { width: 'device-width', initialScale: 1, viewportFit: 'cover' },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

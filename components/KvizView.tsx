@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import type { Tema, Pitanje } from '@/lib/pitanja';
+import { spremiRezultat } from '@/lib/napredak';
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -27,6 +28,8 @@ const gradijent: Record<string, string> = {
   teal:   'from-teal-400 to-cyan-500',
   sky:    'from-sky-400 to-blue-500',
   rose:   'from-rose-400 to-pink-500',
+  indigo: 'from-indigo-500 to-blue-600',
+  orange: 'from-orange-400 to-amber-500',
 };
 
 interface AnswerState { selected: number; correct: boolean }
@@ -70,6 +73,20 @@ export default function KvizView({ tema }: { tema: Tema }) {
   };
 
   const ocjenaPosto = ukupno > 0 ? Math.round((tocno / ukupno) * 100) : 0;
+
+  useEffect(() => {
+    if (gotovo && ukupno > 0) {
+      spremiRezultat({
+        temaId: tema.id,
+        temaNaziv: tema.naziv,
+        predmet: tema.predmet,
+        vrsta: 'kviz',
+        tocno,
+        ukupno,
+        posto: ocjenaPosto,
+      });
+    }
+  }, [gotovo]);
 
   if (gotovo) {
     const emoji = ocjenaPosto >= 90 ? '🏆' : ocjenaPosto >= 70 ? '🎉' : ocjenaPosto >= 50 ? '👍' : '💪';
@@ -125,15 +142,27 @@ export default function KvizView({ tema }: { tema: Tema }) {
         <div className="grid grid-cols-1 gap-3">
           {trenutno.o.map((opcija, i) => {
             let klasa = 'w-full text-left p-4 rounded-2xl border-2 font-bold text-slate-700 transition-all duration-200 text-sm md:text-base ';
-            if (!odgovor) klasa += 'bg-white border-slate-200 hover:border-indigo-400 hover:bg-indigo-50 cursor-pointer';
-            else if (i === trenutno.t) klasa += 'bg-emerald-100 border-emerald-500 text-emerald-800';
-            else if (i === odgovor.selected && !odgovor.correct) klasa += 'bg-red-100 border-red-400 text-red-700';
-            else klasa += 'bg-white border-slate-200 opacity-50';
+            let animacija = '';
+            if (!odgovor) {
+              klasa += 'bg-white border-slate-200 hover:border-indigo-400 hover:bg-indigo-50 hover:scale-[1.01] cursor-pointer active:scale-[0.99]';
+            } else if (i === trenutno.t) {
+              klasa += 'bg-emerald-100 border-emerald-500 text-emerald-800 scale-[1.02]';
+              animacija = 'animate-bounce-once';
+            } else if (i === odgovor.selected && !odgovor.correct) {
+              klasa += 'bg-red-100 border-red-400 text-red-700';
+              animacija = 'animate-shake';
+            } else {
+              klasa += 'bg-white border-slate-200 opacity-40';
+            }
             const slovo = ['A', 'B', 'C', 'D'][i];
             return (
-              <button key={i} className={klasa} onClick={() => odgovori(i)} disabled={!!odgovor}>
+              <button key={i} className={`${klasa} ${animacija}`} onClick={() => odgovori(i)} disabled={!!odgovor}>
                 <span className="inline-flex items-center gap-3">
-                  <span className="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center text-xs font-black shrink-0">
+                  <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black shrink-0 ${
+                    odgovor && i === trenutno.t ? 'bg-emerald-500 text-white' :
+                    odgovor && i === odgovor.selected && !odgovor.correct ? 'bg-red-400 text-white' :
+                    'bg-slate-100'
+                  }`}>
                     {odgovor ? (i === trenutno.t ? '✓' : i === odgovor.selected ? '✗' : slovo) : slovo}
                   </span>
                   {opcija}
